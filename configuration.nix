@@ -9,8 +9,7 @@
     ./hardware-configuration.nix
   ];
 
-
-
+  services.docker.enable = true;
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -108,9 +107,6 @@
       unstable = import <nixos-unstable> { config = config.nixpkgs.config; };
     };
   };
-
-  # Enable Docker
-  services.docker.enable = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
