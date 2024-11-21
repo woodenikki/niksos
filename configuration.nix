@@ -10,6 +10,8 @@
   ];
 
 
+
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -84,7 +86,7 @@
     isNormalUser = true;
     description = "Nik";
     group = "nik";  # Set the primary group
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker"];
     home = "/home/nik";
   };
 
@@ -106,6 +108,9 @@
       unstable = import <nixos-unstable> { config = config.nixpkgs.config; };
     };
   };
+
+  # Enable Docker
+  services.docker.enable = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
