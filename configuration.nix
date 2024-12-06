@@ -78,20 +78,18 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # user accounts defined in home.nix
+  # Define the user account for `nik`
   users.users.nik = {
     isNormalUser = true;
     description = "Nik";
+    group = "nik";  # Set the primary group
     extraGroups = [ "networkmanager" "wheel" ];
     home = "/home/nik";
-    packages = with pkgs; [
-      brave
-      firefox
-      spotify
-      discord
-    #  thunderbird
-    ];
   };
+
+  # Define the group `nik`
+  users.groups.nik = {};
 
   # Enable automatic login for the user.
   services.xserver.displayManager.autoLogin.enable = true;
@@ -112,15 +110,19 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    vim
     wget
     zsh
     oh-my-zsh
     python310
     vscode
     bat
-    
+    (vim_configurable.overrideAttrs (oldAttrs: {
+      withX = true;
+      withGtk = true;
+    }))
   ];
+
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
