@@ -13,14 +13,15 @@
   programs.git = {
     enable = true;
 
-    # Global Git defaults
-    userName = "Nikki Wood";
-    userEmail = "woodenikki@gmail.com";
-
+    # Remove global defaults and focus on directory-specific configurations
     extraConfig = {
       # Per-directory configuration using includeIf
       "includeIf.gitdir:/home/nik/Repos/nikslp/" = {
         path = "/home/nik/.gitconfig-nkslip";
+      };
+
+      "includeIf.gitdir:/home/nik/Repos/woodenikki/" = {
+        path = "/home/nik/.gitconfig-personal";
       };
     };
   };
