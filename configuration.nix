@@ -9,7 +9,6 @@
     ./hardware-configuration.nix
   ];
 
-  services.docker.enable = true;
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -85,7 +84,7 @@
     isNormalUser = true;
     description = "Nik";
     group = "nik";  # Set the primary group
-    extraGroups = [ "networkmanager" "wheel" "docker"];
+    extraGroups = [ "networkmanager" "wheel" ];
     home = "/home/nik";
   };
 

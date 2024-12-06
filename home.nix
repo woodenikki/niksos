@@ -1,30 +1,35 @@
-{ config, pkgs, lib, ... }:
+{
+  config, pkgs, lib, ... }:
 
 {
-  # Set user information
+  # Enable unfree packages
+  nixpkgs.config.allowUnfree = true;
+
+  # Rest of your Home Manager configuration
   home.username = "nik";
-  home.homeDirectory = lib.mkForce "/home/nik";  # Force to avoid conflicts
+  home.homeDirectory = lib.mkForce "/home/nik";
   home.stateVersion = "23.11";
 
-  # Current Version Missmatch (idgaf)
-  home.enableNixpkgsReleaseCheck = false;
+  programs.git = {
+    enable = true;
 
+    # Global Git defaults
+    userName = "Nikki Wood";
+    userEmail = "woodenikki@gmail.com";
 
-  # Enable Zsh and specify packages
-  programs.zsh.enable = true;
+    extraConfig = {
+      # Per-directory configuration using includeIf
+      "includeIf.gitdir:/home/nik/Repos/nikslp/" = {
+        path = "/home/nik/.gitconfig-nkslip";
+      };
+    };
+  };
+
   home.packages = with pkgs; [
     brave
     firefox
     spotify
     discord
-    kitty # similar to iterm2?
+    kitty
   ];
-
-  # Git configuration for the user
-  programs.git = {
-    enable = true;
-    userName = "woodenikki";
-    userEmail = "woodenikki@gmail.com";
-  };
-
 }
