@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports = [
@@ -38,12 +38,20 @@
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
     libinput.enable = true;
-    libinput = {
-      tapToClick = true;
-      naturalScrolling = true;
-      middleEmulation = true;
-    };
   };
+
+  # Custom touchpad configuration (using lib.mkForce or renaming)
+  environment.etc."X11/xorg.conf.d/40-libinput.conf".text = lib.mkForce ''
+    Section "InputClass"
+        Identifier "libinput touchpad"
+        MatchIsTouchpad "on"
+        Driver "libinput"
+
+        Option "Tapping" "on"              # Enable tap-to-click
+        Option "NaturalScrolling" "true"   # Enable natural scrolling
+        Option "MiddleEmulation" "true"    # Enable middle-click emulation
+    EndSection
+  '';
 
   # Printing
   services.printing.enable = true;
