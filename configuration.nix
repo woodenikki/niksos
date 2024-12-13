@@ -89,8 +89,13 @@
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
 
-  # Unfree packages
-  nixpkgs.config.allowUnfree = true;
+  # Flatpak
+  services.flatpak.enable = true;
+
+  # Allow Unfree Packages
+  nixpkgs.config = {
+    allowUnfree = true;
+  };
 
   # System Packages
   environment.systemPackages = with pkgs; [
@@ -102,6 +107,10 @@
     vscode
     bat
     libinput
+    flatpak
+    spotify
+    libGL
+    curl
     (vim_configurable.overrideAttrs (oldAttrs: {
       withX = true;
       withGtk = true;
