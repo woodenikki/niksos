@@ -1,19 +1,18 @@
-{
-  config, pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   # Enable unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # Rest of your Home Manager configuration
+  # Home Manager configurations for the user
   home.username = "nik";
   home.homeDirectory = lib.mkForce "/home/nik";
   home.stateVersion = "23.11";
 
+  # Git configuration with directory-specific settings
   programs.git = {
     enable = true;
 
-    # Remove global defaults and focus on directory-specific configurations
     extraConfig = {
       # Per-directory configuration using includeIf
       "includeIf.gitdir:/home/nik/Repos/nikslp/" = {
@@ -26,6 +25,7 @@
     };
   };
 
+  # Applications and tools to be installed
   home.packages = with pkgs; [
     brave
     firefox
@@ -34,6 +34,7 @@
     kitty
   ];
 
+  # Zsh configuration with custom aliases
   programs.zsh = {
     enable = true;
     initExtra = ''
@@ -41,9 +42,5 @@
       alias gs='git status'
       alias ll='ls -alF'
     '';
-  };
-
-  users.users.nik = {
-    ignoreShellProgramCheck = true; # Avoid conflicts with system configuration
   };
 }

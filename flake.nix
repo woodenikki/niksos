@@ -2,11 +2,9 @@
   description = "A simple NixOS flake";
 
   inputs = {
-    # NixOS official package source, using nixos-23.11 branch
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    # Home Manager input
     home-manager = {
       url = "github:nix-community/home-manager/release-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -23,12 +21,13 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
 
-          # Correctly import user home configuration
+          # Home Manager configuration for NixOS
           home-manager.users.nik = import ./home.nix;
         }
       ];
     };
 
+    # Add Home Manager configurations for home-manager switch
     homeConfigurations = {
       nik = home-manager.lib.homeManagerConfiguration {
         system = "x86_64-linux";
