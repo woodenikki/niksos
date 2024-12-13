@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, ... }:
 
 {
   imports = [
@@ -37,11 +37,11 @@
     xkbVariant = "";
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
-    libinput.enable = true;
+    libinput.enable = true; # Enable libinput
   };
 
-  # Custom touchpad configuration (using lib.mkForce or renaming)
-  environment.etc."X11/xorg.conf.d/40-libinput.conf".text = lib.mkForce ''
+  # Custom touchpad configuration (renamed to avoid conflicts)
+  environment.etc."X11/xorg.conf.d/99-libinput.conf".text = ''
     Section "InputClass"
         Identifier "libinput touchpad"
         MatchIsTouchpad "on"
@@ -101,6 +101,7 @@
     python310
     vscode
     bat
+    libinput
     (vim_configurable.overrideAttrs (oldAttrs: {
       withX = true;
       withGtk = true;
