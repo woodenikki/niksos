@@ -5,18 +5,18 @@
     ./hardware-configuration.nix
   ];
 
-  # Bootloader.
+  # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Networking configuration
-  networking.hostName = "nixos"; # Define your hostname.
-  networking.networkmanager.enable = true; # Enable NetworkManager
+  # Networking
+  networking.hostName = "nixos";
+  networking.networkmanager.enable = true;
 
-  # Time zone configuration
+  # Timezone
   time.timeZone = "America/Denver";
 
-  # Localization settings
+  # Localization
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "en_US.UTF-8";
@@ -30,32 +30,27 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # X11 and GNOME Desktop Environment
+  # X11 and GNOME
   services.xserver = {
-    enable = true; # Enable the X11 windowing system.
-    layout = "us"; # Set keyboard layout
-    xkbVariant = ""; # Set keyboard variant
-    displayManager.gdm.enable = true; # Enable GDM
-    desktopManager.gnome.enable = true; # Enable GNOME Desktop Environment
-
-    # Touchpad and gesture support
-    libinput.enable = true; # Enable libinput for input devices
+    enable = true;
+    layout = "us";
+    xkbVariant = "";
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
+    libinput.enable = true;
     libinput = {
-      touchpad = {
-        enable = true; # Enable touchpad
-        tapToClick = true; # Enable tap-to-click
-        naturalScrolling = true; # Enable natural scrolling
-        middleEmulation = true; # Enable middle-click emulation
-      };
+      tapToClick = true;
+      naturalScrolling = true;
+      middleEmulation = true;
     };
   };
 
-  # Printing support
-  services.printing.enable = true; # Enable CUPS for printing
+  # Printing
+  services.printing.enable = true;
 
-  # Sound configuration
+  # Sound
   sound.enable = true;
-  hardware.pulseaudio.enable = false; # Use PipeWire instead of PulseAudio
+  hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -64,21 +59,21 @@
     pulse.enable = true;
   };
 
-  # User configuration
+  # Users
   users.users.nik = {
     isNormalUser = true;
     description = "Nik";
-    group = "nik"; # Set the primary group
-    extraGroups = [ "networkmanager" "wheel" ]; # Additional group memberships
+    group = "nik";
+    extraGroups = [ "networkmanager" "wheel" ];
     home = "/home/nik";
-    shell = pkgs.zsh; # Use Zsh as the default shell
-    ignoreShellProgramCheck = true; # Prevent shell-related conflicts
+    shell = pkgs.zsh;
+    ignoreShellProgramCheck = true;
   };
 
-  # Group configuration
-  users.groups.nik = {}; # Define group `nik`
+  # Groups
+  users.groups.nik = {};
 
-  # Enable automatic login for the user
+  # Autologin
   services.xserver.displayManager.autoLogin.enable = true;
   services.xserver.displayManager.autoLogin.user = "nik";
 
@@ -86,10 +81,10 @@
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
 
-  # Allow unfree packages
+  # Unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # System-wide packages
+  # System Packages
   environment.systemPackages = with pkgs; [
     vim
     wget
@@ -102,18 +97,14 @@
       withX = true;
       withGtk = true;
     }))
-
-    # Gesture improvements (if available)
-    # Use nixpkgs-unstable for this package if required
-    # (nixpkgs-unstable.gnome-shell-extension-gesture-improvements)
   ];
 
-  # Flake configuration
+  # Flakes
   nix = {
     package = pkgs.nixFlakes;
     extraOptions = "experimental-features = nix-command flakes";
   };
 
-  # Match the state version to your NixOS installation
+  # Match system version
   system.stateVersion = "23.11";
 }
