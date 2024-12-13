@@ -86,6 +86,7 @@
     group = "nik";  # Set the primary group
     extraGroups = [ "networkmanager" "wheel" ];
     home = "/home/nik";
+    shell = pkgs.zsh;
   };
 
   # Define the group `nik`
@@ -122,6 +123,15 @@
       withGtk = true;
     }))
   ];
+
+  programs.zsh = {
+    enable = true;
+    initExtra = ''
+      export PATH=$PATH:/custom/path
+      alias gs='git status'
+      alias ll='ls -alF'
+    '';
+  };
 
 
   # Some programs need SUID wrappers, can be configured further or are
