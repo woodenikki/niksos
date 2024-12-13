@@ -43,4 +43,7 @@
     '';
   };
 
+  users.users.nik = {
+    ignoreShellProgramCheck = true; # Avoid conflicts with system configuration
+  };
 }
