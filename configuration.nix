@@ -124,16 +124,6 @@
     }))
   ];
 
-  programs.zsh = {
-    enable = true;
-    initExtra = ''
-      export PATH=$PATH:/custom/path
-      alias gs='git status'
-      alias ll='ls -alF'
-    '';
-  };
-
-
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;

@@ -33,4 +33,14 @@
     discord
     kitty
   ];
+
+  programs.zsh = {
+    enable = true;
+    initExtra = ''
+      export PATH=$PATH:/custom/path
+      alias gs='git status'
+      alias ll='ls -alF'
+    '';
+  };
+
 }
