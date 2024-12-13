@@ -9,17 +9,15 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # Networking configuration
   networking.hostName = "nixos"; # Define your hostname.
+  networking.networkmanager.enable = true; # Enable NetworkManager
 
-  # Enable networking
-  networking.networkmanager.enable = true;
-
-  # Set your time zone.
+  # Time zone configuration
   time.timeZone = "America/Denver";
 
-  # Select internationalisation properties.
+  # Localization settings
   i18n.defaultLocale = "en_US.UTF-8";
-
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "en_US.UTF-8";
     LC_IDENTIFICATION = "en_US.UTF-8";
@@ -32,25 +30,32 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-
-  # Configure keymap in X11
+  # X11 and GNOME Desktop Environment
   services.xserver = {
-    layout = "us";
-    xkbVariant = "";
+    enable = true; # Enable the X11 windowing system.
+    layout = "us"; # Set keyboard layout
+    xkbVariant = ""; # Set keyboard variant
+    displayManager.gdm.enable = true; # Enable GDM
+    desktopManager.gnome.enable = true; # Enable GNOME Desktop Environment
+
+    # Touchpad and gesture support
+    libinput.enable = true; # Enable libinput for input devices
+    libinput = {
+      touchpad = {
+        enable = true; # Enable touchpad
+        tapToClick = true; # Enable tap-to-click
+        naturalScrolling = true; # Enable natural scrolling
+        middleEmulation = true; # Enable middle-click emulation
+      };
+    };
   };
 
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
+  # Printing support
+  services.printing.enable = true; # Enable CUPS for printing
 
-  # Enable sound with pipewire.
+  # Sound configuration
   sound.enable = true;
-  hardware.pulseaudio.enable = false;
+  hardware.pulseaudio.enable = false; # Use PipeWire instead of PulseAudio
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -59,39 +64,32 @@
     pulse.enable = true;
   };
 
-  # Define the user account for `nik`
+  # User configuration
   users.users.nik = {
     isNormalUser = true;
     description = "Nik";
-    group = "nik";  # Set the primary group
-    extraGroups = [ "networkmanager" "wheel" ];
+    group = "nik"; # Set the primary group
+    extraGroups = [ "networkmanager" "wheel" ]; # Additional group memberships
     home = "/home/nik";
-    shell = pkgs.zsh;
-    ignoreShellProgramCheck = true; # Fix shell conflict with Home Manager
+    shell = pkgs.zsh; # Use Zsh as the default shell
+    ignoreShellProgramCheck = true; # Prevent shell-related conflicts
   };
 
+  # Group configuration
+  users.groups.nik = {}; # Define group `nik`
 
-  # Define the group `nik`
-  users.groups.nik = {};
-
-  # Enable automatic login for the user.
+  # Enable automatic login for the user
   services.xserver.displayManager.autoLogin.enable = true;
   services.xserver.displayManager.autoLogin.user = "nik";
 
-  # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
+  # GNOME autologin workaround
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
 
-  # Allow unfree and experimental packages
-  nixpkgs.config = {
-    allowUnfree = true;
-    packageOverrides = pkgs: {
-      unstable = import <nixos-unstable> { config = config.nixpkgs.config; };
-    };
-  };
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # System-wide packages
   environment.systemPackages = with pkgs; [
     vim
     wget
@@ -104,12 +102,18 @@
       withX = true;
       withGtk = true;
     }))
+
+    # Gesture improvements (if available)
+    # Use nixpkgs-unstable for this package if required
+    # (nixpkgs-unstable.gnome-shell-extension-gesture-improvements)
   ];
 
-  system.stateVersion = "23.11"; # Match your NixOS version.
-
+  # Flake configuration
   nix = {
     package = pkgs.nixFlakes;
     extraOptions = "experimental-features = nix-command flakes";
   };
+
+  # Match the state version to your NixOS installation
+  system.stateVersion = "23.11";
 }
